@@ -1,0 +1,205 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { 
+  User as FirebaseUser, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  sendEmailVerification
+} from 'firebase/auth';
+import { auth, db } from '../firebase/config';
+import { doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { User, Notification } from '../types';
+
+interface AuthContextType {
+  currentUser: FirebaseUser | null;
+  userData: User | null;
+  loading: boolean;
+  signUp: (email: string, password: string, username: string, displayName: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  updateUserProfile: (data: Partial<User>) => Promise<void>;
+  updateUserEmail: (newEmail: string, password: string) => Promise<void>;
+  updateUserPassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  isAdmin: boolean;
+  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+      
+      if (user) {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists()) {
+          const data = userSnap.data() as User;
+          setUserData(data);
+          setIsAdmin(data.role === 'admin');
+        }
+      } else {
+        setUserData(null);
+        setIsAdmin(false);
+      }
+      
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const signUp = async (email: string, password: string, username: string, displayName: string) => {
+    // Check if username is taken
+    const usernameQuery = await getDoc(doc(db, 'usernames', username.toLowerCase()));
+    if (usernameQuery.exists()) {
+      throw new Error('Username is already taken');
+    }
+
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Send email verification
+    await sendEmailVerification(user);
+    
+    // Update profile
+    await updateProfile(user, { displayName: username });
+    
+    // Create user document
+    const userData: User = {
+      uid: user.uid,
+      email: user.email!,
+      username: username.toLowerCase(),
+      displayName,
+      createdAt: new Date(),
+      role: 'user',
+      bio: '',
+      photoURL: '',
+      notifications: [],
+      emailVerified: false
+    };
+    
+    await setDoc(doc(db, 'users', user.uid), userData);
+    await setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: user.uid });
+    
+    setUserData(userData);
+
+    throw new Error('Please verify your email. Check your inbox for verification link.');
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      
+      if (!user.emailVerified) {
+        await signOut(auth);
+        throw new Error('Please verify your email before logging in');
+      }
+      
+      // Update emailVerified status in user document
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, { emailVerified: true });
+      
+    } catch (error: any) {
+      if (error.code === 'auth/invalid-credential') {
+        throw new Error('Invalid email or password');
+      }
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+    setUserData(null);
+  };
+
+  const updateUserProfile = async (data: Partial<User>) => {
+    if (!currentUser) throw new Error('No authenticated user');
+
+    const userRef = doc(db, 'users', currentUser.uid);
+    await updateDoc(userRef, data);
+
+    if (data.displayName) {
+      await updateProfile(currentUser, { displayName: data.displayName });
+    }
+    if (data.photoURL) {
+      await updateProfile(currentUser, { photoURL: data.photoURL });
+    }
+
+    setUserData(prev => prev ? { ...prev, ...data } : null);
+  };
+
+  const updateUserEmail = async (newEmail: string, password: string) => {
+    if (!currentUser) throw new Error('No authenticated user');
+
+    const credential = EmailAuthProvider.credential(currentUser.email!, password);
+    await reauthenticateWithCredential(currentUser, credential);
+    await updateEmail(currentUser, newEmail);
+    
+    await updateDoc(doc(db, 'users', currentUser.uid), { email: newEmail });
+    setUserData(prev => prev ? { ...prev, email: newEmail } : null);
+  };
+
+  const updateUserPassword = async (currentPassword: string, newPassword: string) => {
+    if (!currentUser) throw new Error('No authenticated user');
+
+    const credential = EmailAuthProvider.credential(currentUser.email!, currentPassword);
+    await reauthenticateWithCredential(currentUser, credential);
+    await updatePassword(currentUser, newPassword);
+  };
+
+  const addNotification = async (notification: Omit<Notification, 'id' | 'createdAt'>) => {
+    if (!currentUser) throw new Error('No authenticated user');
+
+    const userRef = doc(db, 'users', notification.fromUserId);
+    const newNotification: Notification = {
+      ...notification,
+      id: Date.now().toString(),
+      createdAt: new Date()
+    };
+
+    await updateDoc(userRef, {
+      notifications: arrayUnion(newNotification)
+    });
+  };
+
+  const value = {
+    currentUser,
+    userData,
+    loading,
+    signUp,
+    login,
+    logout,
+    updateUserProfile,
+    updateUserEmail,
+    updateUserPassword,
+    isAdmin,
+    addNotification
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
