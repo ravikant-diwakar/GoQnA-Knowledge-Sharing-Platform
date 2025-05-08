@@ -21,14 +21,38 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // Validate inputs before attempting login
+    if (!email.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    if (!password.trim()) {
+      setError('Please enter your password');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    
     setLoading(true);
     
     try {
-      await login(email, password);
+      await login(email.trim(), password);
       navigate(from);
     } catch (err: any) {
       console.error('Login error:', err);
-      setError(err.message || 'Failed to log in. Please try again');
+      // Provide more user-friendly error messages
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('Invalid email or password. Please try again.');
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Too many failed login attempts. Please try again later.');
+      } else {
+        setError('An error occurred during login. Please try again.');
+      }
       setLoading(false);
     }
   };
@@ -142,4 +166,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login
+export default Login;

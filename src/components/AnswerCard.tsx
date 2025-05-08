@@ -22,10 +22,26 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
   const { currentUser } = useAuth();
   const { incrementField } = useFirestore('answers');
   
-  // Format date
-  const formattedDate = answer.createdAt ? 
-    formatDistanceToNow(new Date(answer.createdAt), { addSuffix: true }) : 
-    'recently';
+  // Format date with validation
+  const formattedDate = React.useMemo(() => {
+    if (!answer.createdAt) return 'recently';
+    
+    try {
+      const date = typeof answer.createdAt === 'string' 
+        ? new Date(answer.createdAt)
+        : answer.createdAt;
+        
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        return 'recently';
+      }
+      
+      return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return 'recently';
+    }
+  }, [answer.createdAt]);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     if (!currentUser) return;

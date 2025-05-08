@@ -13,7 +13,7 @@ import {
   sendEmailVerification
 } from 'firebase/auth';
 import { auth, db } from '../firebase/config';
-import { doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { User, Notification } from '../types';
 
 interface AuthContextType {
@@ -27,7 +27,9 @@ interface AuthContextType {
   updateUserEmail: (newEmail: string, password: string) => Promise<void>;
   updateUserPassword: (currentPassword: string, newPassword: string) => Promise<void>;
   isAdmin: boolean;
-  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => Promise<void>;
+  addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => Promise<void>;
+  markNotificationAsRead: (notificationId: string) => Promise<void>;
+  clearNotifications: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -71,21 +73,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, username: string, displayName: string) => {
-    // Check if username is taken
     const usernameQuery = await getDoc(doc(db, 'usernames', username.toLowerCase()));
     if (usernameQuery.exists()) {
       throw new Error('Username is already taken');
     }
 
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
-    
-    // Send email verification
     await sendEmailVerification(user);
-    
-    // Update profile
     await updateProfile(user, { displayName: username });
     
-    // Create user document
     const userData: User = {
       uid: user.uid,
       email: user.email!,
@@ -103,7 +99,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: user.uid });
     
     setUserData(userData);
-
     throw new Error('Please verify your email. Check your inbox for verification link.');
   };
 
@@ -116,7 +111,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('Please verify your email before logging in');
       }
       
-      // Update emailVerified status in user document
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { emailVerified: true });
       
@@ -146,6 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await updateProfile(currentUser, { photoURL: data.photoURL });
     }
 
+    // Update local state
     setUserData(prev => prev ? { ...prev, ...data } : null);
   };
 
@@ -168,19 +163,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await updatePassword(currentUser, newPassword);
   };
 
-  const addNotification = async (notification: Omit<Notification, 'id' | 'createdAt'>) => {
+  const addNotification = async (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
     if (!currentUser) throw new Error('No authenticated user');
 
     const userRef = doc(db, 'users', notification.fromUserId);
     const newNotification: Notification = {
       ...notification,
       id: Date.now().toString(),
-      createdAt: new Date()
+      createdAt: new Date(),
+      read: false
     };
 
     await updateDoc(userRef, {
       notifications: arrayUnion(newNotification)
     });
+
+    // Update local state
+    setUserData(prev => prev ? {
+      ...prev,
+      notifications: [...prev.notifications, newNotification]
+    } : null);
+  };
+
+  const markNotificationAsRead = async (notificationId: string) => {
+    if (!currentUser || !userData) return;
+
+    const userRef = doc(db, 'users', currentUser.uid);
+    const updatedNotifications = userData.notifications.map(notification =>
+      notification.id === notificationId ? { ...notification, read: true } : notification
+    );
+
+    await updateDoc(userRef, { notifications: updatedNotifications });
+    setUserData(prev => prev ? { ...prev, notifications: updatedNotifications } : null);
+  };
+
+  const clearNotifications = async () => {
+    if (!currentUser) return;
+
+    const userRef = doc(db, 'users', currentUser.uid);
+    await updateDoc(userRef, { notifications: [] });
+    setUserData(prev => prev ? { ...prev, notifications: [] } : null);
   };
 
   const value = {
@@ -194,7 +216,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     updateUserEmail,
     updateUserPassword,
     isAdmin,
-    addNotification
+    addNotification,
+    markNotificationAsRead,
+    clearNotifications
   };
 
   return (

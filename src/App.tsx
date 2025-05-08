@@ -9,6 +9,7 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import SearchResults from './pages/SearchResults';
 import UserProfile from './pages/UserProfile';
+import EditProfile from './pages/EditProfile';
 import Tags from './pages/Tags';
 import Users from './pages/Users';
 import NotFound from './pages/NotFound';
@@ -28,6 +29,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/search" element={<SearchResults />} />
               <Route path="/profile/:id" element={<UserProfile />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/tags" element={<Tags />} />
               <Route path="/tags/:tag" element={<SearchResults />} />
               <Route path="/users" element={<Users />} />

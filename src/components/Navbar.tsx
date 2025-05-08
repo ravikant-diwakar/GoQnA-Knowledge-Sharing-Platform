@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, Menu, X, User, LogOut, LogIn, Home, PlusCircle, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -6,7 +6,8 @@ import { useAuth } from '../context/AuthContext';
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { currentUser, logout } = useAuth();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { currentUser, userData, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -27,6 +28,8 @@ const Navbar: React.FC = () => {
       console.error('Logout error:', error);
     }
   };
+
+  const unreadNotifications = userData?.notifications.filter(n => !n.read) || [];
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -86,9 +89,54 @@ const Navbar: React.FC = () => {
                   Ask Question
                 </Link>
                 
-                <button className="text-gray-400 hover:text-gray-600">
-                  <Bell className="w-6 h-6" />
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowNotifications(!showNotifications)}
+                    className="relative text-gray-400 hover:text-gray-600"
+                  >
+                    <Bell className="w-6 h-6" />
+                    {unreadNotifications.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        {unreadNotifications.length}
+                      </span>
+                    )}
+                  </button>
+                  
+                  {showNotifications && (
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
+                      <div className="px-4 py-2 border-b border-gray-200">
+                        <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+                      </div>
+                      <div className="max-h-96 overflow-y-auto">
+                        {userData?.notifications.length === 0 ? (
+                          <div className="px-4 py-3 text-sm text-gray-500">
+                            No notifications yet
+                          </div>
+                        ) : (
+                          userData?.notifications.map((notification) => (
+                            <div 
+                              key={notification.id}
+                              className={`px-4 py-3 hover:bg-gray-50 ${!notification.read ? 'bg-blue-50' : ''}`}
+                            >
+                              <p className="text-sm text-gray-900">
+                                <Link 
+                                  to={`/profile/${notification.fromUserId}`}
+                                  className="font-medium text-blue-600 hover:text-blue-800"
+                                >
+                                  @{notification.fromUsername}
+                                </Link>
+                                {' '}{notification.content}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {new Date(notification.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 
                 <div className="relative group">
                   <div className="flex items-center space-x-3">
@@ -96,7 +144,7 @@ const Navbar: React.FC = () => {
                       {currentUser.photoURL ? (
                         <img 
                           src={currentUser.photoURL} 
-                          alt={currentUser.displayName || 'User'} 
+                          alt={userData?.username || 'User'} 
                           className="h-8 w-8 rounded-full"
                         />
                       ) : (
@@ -104,6 +152,9 @@ const Navbar: React.FC = () => {
                           <User className="h-4 w-4 text-blue-600" />
                         </div>
                       )}
+                      <span className="text-sm font-medium text-gray-700">
+                        @{userData?.username}
+                      </span>
                     </Link>
                     
                     <button 
@@ -203,7 +254,7 @@ const Navbar: React.FC = () => {
                   {currentUser.photoURL ? (
                     <img 
                       src={currentUser.photoURL} 
-                      alt={currentUser.displayName || 'User'} 
+                      alt={userData?.username || 'User'} 
                       className="h-10 w-10 rounded-full"
                     />
                   ) : (
@@ -213,7 +264,7 @@ const Navbar: React.FC = () => {
                   )}
                   <div className="ml-3">
                     <div className="text-base font-medium text-gray-800">
-                      {currentUser.displayName || 'User'}
+                      @{userData?.username}
                     </div>
                     <div className="text-sm font-medium text-gray-500">
                       {currentUser.email}
