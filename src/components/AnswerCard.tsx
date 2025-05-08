@@ -133,17 +133,17 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
                 {answer.userPhotoURL ? (
                   <img 
                     src={answer.userPhotoURL} 
-                    alt={answer.userName}
+                    alt={answer.username}
                     className="h-5 w-5 rounded-full mr-1" 
                   />
                 ) : (
                   <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center mr-1">
                     <span className="text-xs text-blue-600">
-                      {answer.userName.charAt(0).toUpperCase()}
+                      {answer.username.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
-                <span>{answer.userName}</span>
+                <span>{answer.username}</span>
               </Link>
             </div>
           </div>

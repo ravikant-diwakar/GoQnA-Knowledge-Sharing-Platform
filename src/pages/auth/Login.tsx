@@ -42,7 +42,8 @@ const Login: React.FC = () => {
     
     try {
       await login(email.trim(), password);
-      navigate(from);
+      // navigate(from);
+      navigate(from ?? '/default-route');
     } catch (err: any) {
       console.error('Login error:', err);
       // Provide more user-friendly error messages
