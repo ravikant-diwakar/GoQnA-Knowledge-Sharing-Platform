@@ -30,6 +30,7 @@ function App() {
               <Route path="/search" element={<SearchResults />} />
               <Route path="/profile/:id" element={<UserProfile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
+              <Route path="/settings/profile" element={<EditProfile />} />
               <Route path="/tags" element={<Tags />} />
               <Route path="/tags/:tag" element={<SearchResults />} />
               <Route path="/users" element={<Users />} />

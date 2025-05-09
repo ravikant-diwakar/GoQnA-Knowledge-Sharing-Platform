@@ -67,19 +67,19 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
   const canAcceptAnswer = currentUser && currentUser.uid === questionUserId;
 
   return (
-    <div className={`border ${answer.isAccepted ? 'border-green-300 bg-green-50' : 'border-gray-200'} rounded-lg p-6 my-4`}>
-      <div className="flex">
+    <div className={`border ${answer.isAccepted ? 'border-green-300 bg-green-50' : 'border-gray-200'} rounded-lg p-4 sm:p-6 my-4`}>
+      <div className="flex flex-col sm:flex-row">
         {/* Voting buttons */}
-        <div className="flex flex-col items-center mr-4">
+        <div className="flex sm:flex-col items-center sm:mr-4 mb-4 sm:mb-0">
           <button 
             onClick={() => handleVote('upvote')}
             disabled={!currentUser}
             className={`p-1 rounded-full ${currentUser ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
             title={currentUser ? "Upvote this answer" : "Login to vote"}
           >
-            <ThumbsUp className="h-6 w-6 text-gray-500" />
+            <ThumbsUp className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
           </button>
-          <span className="text-center my-1 font-medium">
+          <span className="mx-2 sm:my-1 font-medium">
             {(answer.upvotes || 0) - (answer.downvotes || 0)}
           </span>
           <button 
@@ -88,7 +88,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
             className={`p-1 rounded-full ${currentUser ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
             title={currentUser ? "Downvote this answer" : "Login to vote"}
           >
-            <ThumbsDown className="h-6 w-6 text-gray-500" />
+            <ThumbsDown className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
           </button>
         </div>
         
@@ -96,7 +96,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
         <div className="flex-1">
           <div className="mb-4 relative">
             {answer.isAccepted && (
-              <div className="absolute -left-12 top-0 flex items-center text-green-600" title="Accepted answer">
+              <div className="absolute -left-8 top-0 hidden sm:flex items-center text-green-600" title="Accepted answer">
                 <CheckCircle className="h-6 w-6 fill-green-100" />
               </div>
             )}
@@ -105,30 +105,30 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
             </div>
           </div>
           
-          <div className="flex justify-between items-center mt-4 pt-2 border-t border-gray-100">
+          <div className="flex flex-wrap justify-between items-center mt-4 pt-2 border-t border-gray-100 gap-2">
+            {answer.isAccepted && (
+              <div className="sm:hidden text-green-600 font-medium text-sm flex items-center">
+                <CheckCircle className="h-4 w-4 mr-1" />
+                Accepted
+              </div>
+            )}
+            
             {canAcceptAnswer && !answer.isAccepted && (
               <button
                 onClick={handleAccept}
                 className="text-green-600 hover:text-green-800 font-medium text-sm flex items-center"
               >
                 <CheckCircle className="h-4 w-4 mr-1" />
-                Accept this answer
+                Accept
               </button>
             )}
             
-            {answer.isAccepted && (
-              <div className="text-green-600 font-medium text-sm flex items-center">
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Accepted answer
-              </div>
-            )}
-            
             <div className="flex items-center text-sm text-gray-500 ml-auto">
-              <span>Answered {formattedDate}</span>
+              <span className="whitespace-nowrap">Answered {formattedDate}</span>
               <span className="mx-2">•</span>
               <Link 
                 to={`/profile/${answer.userId}`}
-                className="flex items-center text-blue-600 hover:text-blue-800"
+                className="flex items-center text-indigo-600 hover:text-indigo-800"
               >
                 {answer.userPhotoURL ? (
                   <img 
@@ -137,13 +137,13 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
                     className="h-5 w-5 rounded-full mr-1" 
                   />
                 ) : (
-                  <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center mr-1">
-                    <span className="text-xs text-blue-600">
+                  <div className="h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center mr-1">
+                    <span className="text-xs text-indigo-600">
                       {answer.userName.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
-                <span>{answer.userName}</span>
+                <span className="hover:underline">{answer.userName}</span>
               </Link>
             </div>
           </div>
