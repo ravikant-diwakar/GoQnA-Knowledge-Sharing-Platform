@@ -125,7 +125,7 @@ const SearchResults: React.FC = () => {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full bg-white rounded-lg border border-gray-300 py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full bg-white rounded-lg border border-gray-300 py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -162,7 +162,7 @@ const SearchResults: React.FC = () => {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as 'relevance' | 'newest' | 'votes')}
-            className="rounded-md border-gray-300 py-1 pl-3 pr-8 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="rounded-md border-gray-300 py-1 pl-3 pr-8 text-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
           >
             <option value="relevance">Relevance</option>
             <option value="newest">Newest</option>
@@ -173,7 +173,7 @@ const SearchResults: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
         </div>
       ) : error ? (
         <div className="bg-red-50 border-l-4 border-red-400 p-4 my-4">

@@ -217,7 +217,7 @@ const QuestionDetail: React.FC = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-center items-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
         </div>
       </div>
     );
@@ -236,7 +236,7 @@ const QuestionDetail: React.FC = () => {
         <div className="mt-6 text-center">
           <Link
             to="/"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
           >
             Go back to home
           </Link>
@@ -289,7 +289,7 @@ const QuestionDetail: React.FC = () => {
             <Link 
               key={index} 
               to={`/tags/${tag}`}
-              className="inline-block bg-blue-50 text-blue-600 px-2 py-1 text-xs font-medium rounded-md hover:bg-blue-100 transition-colors duration-200"
+              className="inline-block bg-red-50 text-red-600 px-2 py-1 text-xs font-medium rounded-md hover:bg-red-100 transition-colors duration-200"
             >
               {tag}
             </Link>
@@ -334,7 +334,7 @@ const QuestionDetail: React.FC = () => {
                 <span className="text-gray-500 mr-2">Asked by</span>
                 <Link 
                   to={`/profile/${question.userId}`}
-                  className="flex items-center text-blue-600 hover:text-blue-800"
+                  className="flex items-center text-red-600 hover:text-red-800"
                 >
                   {question.userPhotoURL ? (
                     <img 
@@ -343,8 +343,8 @@ const QuestionDetail: React.FC = () => {
                       className="h-8 w-8 rounded-full mr-2" 
                     />
                   ) : (
-                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                      <span className="text-sm text-blue-600">
+                    <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
+                      <span className="text-sm text-red-600">
                         {question.userName.charAt(0).toUpperCase()}
                       </span>
                     </div>
@@ -401,7 +401,7 @@ const QuestionDetail: React.FC = () => {
               <textarea
                 id="answer"
                 rows={6}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
                 placeholder="Write your answer here..."
                 value={newAnswer}
                 onChange={(e) => setNewAnswer(e.target.value)}
@@ -414,8 +414,8 @@ const QuestionDetail: React.FC = () => {
                 disabled={submitting || !newAnswer.trim()}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
                   submitting || !newAnswer.trim()
-                    ? 'bg-blue-300 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                    ? 'bg-red-300 cursor-not-allowed'
+                    : 'bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                 }`}
               >
                 {submitting ? 'Posting...' : 'Post Your Answer'}
@@ -428,13 +428,13 @@ const QuestionDetail: React.FC = () => {
             <div className="flex justify-center space-x-4">
               <Link
                 to="/login"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 Log in
               </Link>
               <Link
                 to="/signup"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 Sign up
               </Link>

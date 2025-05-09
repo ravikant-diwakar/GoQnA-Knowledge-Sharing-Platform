@@ -48,13 +48,13 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ show, onClo
               key={notification.id}
               onClick={() => handleNotificationClick(notification.id)}
               className={`w-full text-left px-4 py-3 hover:bg-gray-50 ${
-                !notification.read ? 'bg-blue-50' : ''
+                !notification.read ? 'bg-red-50' : ''
               }`}
             >
               <p className="text-sm text-gray-900">
                 <Link
                   to={`/profile/${notification.fromUserId}`}
-                  className="font-medium text-blue-600 hover:text-blue-800"
+                  className="font-medium text-red-600 hover:text-red-800"
                   onClick={(e) => e.stopPropagation()}
                 >
                   @{notification.fromUsername}

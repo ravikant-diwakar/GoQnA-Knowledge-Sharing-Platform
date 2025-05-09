@@ -31,7 +31,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     >
       <div className="flex items-start justify-between">
         <div className="flex-grow">
-          <h2 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+          <h2 className="text-xl font-semibold text-gray-900 hover:text-red-600 transition-colors duration-300 line-clamp-2">
             {question.title}
           </h2>
           
@@ -44,7 +44,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
               <Link 
                 key={index} 
                 to={`/tags/${tag}`}
-                className="inline-block bg-blue-50 text-blue-600 px-2 py-1 text-xs font-medium rounded-md hover:bg-blue-100 transition-colors duration-200"
+                className="inline-block bg-red-50 text-red-600 px-2 py-1 text-xs font-medium rounded-md hover:bg-red-100 transition-colors duration-200"
                 onClick={(e) => e.stopPropagation()}
               >
                 {tag}
@@ -91,7 +91,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
             <span className="mr-1 text-gray-500">by</span>
             <Link 
               to={`/profile/${question.userId}`}
-              className="flex items-center text-blue-600 hover:text-blue-800"
+              className="flex items-center text-red-600 hover:text-red-800"
               onClick={(e) => e.stopPropagation()}
             >
               {question.userPhotoURL ? (
@@ -101,8 +101,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
                   className="h-5 w-5 rounded-full mr-1" 
                 />
               ) : (
-                <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center mr-1">
-                  <span className="text-xs text-blue-600">
+                <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-1">
+                  <span className="text-xs text-red-600">
                     {question.userName.charAt(0).toUpperCase()}
                   </span>
                 </div>

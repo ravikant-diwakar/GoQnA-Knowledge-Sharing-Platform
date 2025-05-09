@@ -28,7 +28,7 @@ function Users() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center bg-indigo-100 text-indigo-600 text-xl font-semibold">
+                  <div className="h-full w-full flex items-center justify-center bg-red-100 text-red-600 text-xl font-semibold">
                     {user.displayName[0].toUpperCase()}
                   </div>
                 )}
@@ -40,7 +40,7 @@ function Users() {
                 <p className="text-sm text-gray-500">
                   Member since {new Date(user.createdAt).toLocaleDateString()}
                 </p>
-                <p className="text-sm font-medium text-indigo-600">
+                <p className="text-sm font-medium text-red-600">
                   Reputation: {user.reputation}
                 </p>
               </div>

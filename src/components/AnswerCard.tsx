@@ -128,7 +128,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
               <span className="mx-2">•</span>
               <Link 
                 to={`/profile/${answer.userId}`}
-                className="flex items-center text-indigo-600 hover:text-indigo-800"
+                className="flex items-center text-red-600 hover:text-red-800"
               >
                 {answer.userPhotoURL ? (
                   <img 
@@ -137,8 +137,8 @@ const AnswerCard: React.FC<AnswerCardProps> = ({
                     className="h-5 w-5 rounded-full mr-1" 
                   />
                 ) : (
-                  <div className="h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center mr-1">
-                    <span className="text-xs text-indigo-600">
+                  <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-1">
+                    <span className="text-xs text-red-600">
                       {answer.userName.charAt(0).toUpperCase()}
                     </span>
                   </div>

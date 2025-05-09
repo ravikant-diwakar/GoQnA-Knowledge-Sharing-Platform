@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-indigo-700 font-bold text-2xl">Q&A</span>
+              <span className="text-orange-700 font-bold text-2xl">Q&A</span>
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link 
@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-gray-100 rounded-full py-2 pl-4 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                className="bg-gray-100 rounded-full py-2 pl-4 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
               <>
                 <Link 
                   to="/ask" 
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300 flex items-center"
+                  className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-300 flex items-center"
                 >
                   <PlusCircle className="w-4 h-4 mr-1" />
                   Ask Question
@@ -119,8 +119,8 @@ const Navbar: React.FC = () => {
                           className="h-8 w-8 rounded-full"
                         />
                       ) : (
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <User className="h-4 w-4 text-indigo-600" />
+                        <div className="h-8 w-8 rounded-full bg-teal-100 flex items-center justify-center">
+                          <User className="h-4 w-4 text-teal-600" />
                         </div>
                       )}
                       <span className="text-sm font-medium text-gray-700">
@@ -142,14 +142,14 @@ const Navbar: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Link 
                   to="/login" 
-                  className="text-indigo-600 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium flex items-center border border-indigo-600 hover:bg-indigo-50"
+                  className="text-teal-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium flex items-center border border-teal-600 hover:bg-teal-50"
                 >
                   <LogIn className="w-4 h-4 mr-1" />
                   Log in
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+                  className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-teal-700"
                 >
                   Sign up
                 </Link>
@@ -160,7 +160,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center sm:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
             >
               <span className="sr-only">Open main menu</span>
               {isMenuOpen ? (
@@ -179,7 +179,7 @@ const Navbar: React.FC = () => {
           <div className="pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className="bg-gray-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              className="bg-gray-50 border-teal-500 text-teal-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
@@ -205,7 +205,7 @@ const Navbar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-gray-100 rounded-full py-2 pl-4 pr-10 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                className="bg-gray-100 rounded-full py-2 pl-4 pr-10 w-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -229,8 +229,8 @@ const Navbar: React.FC = () => {
                       className="h-10 w-10 rounded-full"
                     />
                   ) : (
-                    <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                      <User className="h-5 w-5 text-indigo-600" />
+                    <div className="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center">
+                      <User className="h-5 w-5 text-teal-600" />
                     </div>
                   )}
                   <div className="ml-3">
@@ -282,14 +282,14 @@ const Navbar: React.FC = () => {
               <div className="flex flex-col space-y-2 px-4">
                 <Link
                   to="/login"
-                  className="block text-center px-4 py-2 border border-indigo-600 rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50"
+                  className="block text-center px-4 py-2 border border-teal-600 rounded-md text-base font-medium text-teal-600 hover:bg-teal-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Log in
                 </Link>
                 <Link
                   to="/signup"
-                  className="block text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                  className="block text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-teal-600 hover:bg-teal-700"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign up

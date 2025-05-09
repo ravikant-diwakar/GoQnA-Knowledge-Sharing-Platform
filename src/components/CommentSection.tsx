@@ -147,7 +147,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             <button
               type="submit"
               disabled={!newComment.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
             >
               Add Comment
             </button>
@@ -168,8 +168,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                   className="w-8 h-8 rounded-full"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-blue-600 font-medium">
+                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                  <span className="text-red-600 font-medium">
                     {comment.username[0].toUpperCase()}
                   </span>
                 </div>
@@ -200,7 +200,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                       </button>
                       <button
                         onClick={() => handleEditComment(comment.id)}
-                        className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700"
                       >
                         Save
                       </button>
@@ -216,7 +216,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                     onClick={() => handleLikeComment(comment.id)}
                     className={`flex items-center space-x-1 ${
                       currentUser && comment.likes.includes(currentUser.uid)
-                        ? 'text-blue-600'
+                        ? 'text-red-600'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -278,7 +278,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                       <button
                         onClick={() => handleAddReply(comment.id)}
                         disabled={!replyText.trim()}
-                        className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
                       >
                         Reply
                       </button>
@@ -299,8 +299,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                               className="w-6 h-6 rounded-full"
                             />
                           ) : (
-                            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                              <span className="text-blue-600 text-xs font-medium">
+                            <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
+                              <span className="text-red-600 text-xs font-medium">
                                 {reply.username[0].toUpperCase()}
                               </span>
                             </div>
@@ -322,7 +322,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                                 }}
                                 className={`flex items-center space-x-1 ${
                                   currentUser && reply.likes.includes(currentUser.uid)
-                                    ? 'text-blue-600'
+                                    ? 'text-red-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                 }`}
                               >

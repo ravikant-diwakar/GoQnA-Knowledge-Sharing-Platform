@@ -94,14 +94,14 @@ const AskQuestion: React.FC = () => {
       </div>
       
       {/* Writing guidelines */}
-      <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8">
+      <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
         <div className="flex">
           <div className="flex-shrink-0">
-            <HelpCircle className="h-5 w-5 text-blue-400" />
+            <HelpCircle className="h-5 w-5 text-red-400" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-blue-800">Writing a good question</h3>
-            <div className="mt-2 text-sm text-blue-700">
+            <h3 className="text-sm font-medium text-red-800">Writing a good question</h3>
+            <div className="mt-2 text-sm text-red-700">
               <ul className="list-disc pl-5 space-y-1">
                 <li>Summarize your problem in a clear, concise title</li>
                 <li>Describe what you've tried and what you expected</li>
@@ -139,7 +139,7 @@ const AskQuestion: React.FC = () => {
             type="text"
             id="title"
             maxLength={150}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
             placeholder="e.g., How to implement authentication with Firebase in React?"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -158,7 +158,7 @@ const AskQuestion: React.FC = () => {
           <textarea
             id="body"
             rows={10}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
             placeholder="Describe your question in detail. What have you tried? What's not working? Include any relevant code."
             value={body}
             onChange={(e) => setBody(e.target.value)}
@@ -174,17 +174,17 @@ const AskQuestion: React.FC = () => {
           <p className="text-sm text-gray-500 mb-1">
             Add up to 5 tags to describe what your question is about
           </p>
-          <div className="flex flex-wrap items-center gap-2 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500">
+          <div className="flex flex-wrap items-center gap-2 p-2 border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-red-500 focus-within:border-red-500">
             {tags.map((tag, index) => (
               <div 
                 key={index} 
-                className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm flex items-center"
+                className="bg-red-100 text-red-800 px-2 py-1 rounded-md text-sm flex items-center"
               >
                 <span>{tag}</span>
                 <button 
                   type="button" 
                   onClick={() => handleRemoveTag(tag)} 
-                  className="ml-1 text-blue-600 hover:text-blue-800"
+                  className="ml-1 text-red-600 hover:text-red-800"
                 >
                   &times;
                 </button>
@@ -211,8 +211,8 @@ const AskQuestion: React.FC = () => {
             disabled={isSubmitting || !title.trim() || !body.trim() || tags.length === 0}
             className={`inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white ${
               isSubmitting || !title.trim() || !body.trim() || tags.length === 0
-                ? 'bg-blue-300 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                ? 'bg-red-300 cursor-not-allowed'
+                : 'bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
             }`}
           >
             {isSubmitting ? 'Submitting...' : 'Post Your Question'}

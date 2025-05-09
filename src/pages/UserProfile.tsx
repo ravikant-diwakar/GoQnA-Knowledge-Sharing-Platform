@@ -127,7 +127,7 @@ const UserProfile: React.FC = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-center items-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
         </div>
       </div>
     );
@@ -146,7 +146,7 @@ const UserProfile: React.FC = () => {
         <div className="mt-6 text-center">
           <Link
             to="/"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
           >
             Go back to home
           </Link>
@@ -174,7 +174,7 @@ const UserProfile: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {/* User header */}
-        <div className="p-6 sm:p-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+        <div className="p-6 sm:p-8 bg-gradient-to-r from-red-50 to-red-50 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center">
             <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
               {user.photoURL ? (
@@ -184,8 +184,8 @@ const UserProfile: React.FC = () => {
                   className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-sm" 
                 />
               ) : (
-                <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center border-4 border-white shadow-sm">
-                  <UserIcon className="h-12 w-12 text-blue-600" />
+                <div className="h-24 w-24 rounded-full bg-red-100 flex items-center justify-center border-4 border-white shadow-sm">
+                  <UserIcon className="h-12 w-12 text-red-600" />
                 </div>
               )}
             </div>
@@ -251,7 +251,7 @@ const UserProfile: React.FC = () => {
               onClick={() => setActiveTab('profile')}
               className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                 activeTab === 'profile'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-red-500 text-red-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -262,7 +262,7 @@ const UserProfile: React.FC = () => {
               onClick={() => setActiveTab('questions')}
               className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                 activeTab === 'questions'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-red-500 text-red-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -273,7 +273,7 @@ const UserProfile: React.FC = () => {
               onClick={() => setActiveTab('answers')}
               className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                 activeTab === 'answers'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-red-500 text-red-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -306,7 +306,7 @@ const UserProfile: React.FC = () => {
                     </div>
                   )}
                   {questionCount > 0 && (
-                    <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                       <MessageSquare className="w-4 h-4 mr-1" />
                       Curious ({questionCount})
                     </div>
@@ -331,7 +331,7 @@ const UserProfile: React.FC = () => {
                         <li key={question.id} className="py-3">
                           <Link 
                             to={`/questions/${question.id}`}
-                            className="text-blue-600 hover:text-blue-800 font-medium"
+                            className="text-red-600 hover:text-red-800 font-medium"
                           >
                             {question.title}
                           </Link>
@@ -358,7 +358,7 @@ const UserProfile: React.FC = () => {
                         <li key={answer.id} className="py-3">
                           <Link 
                             to={`/questions/${answer.questionId}`}
-                            className="text-blue-600 hover:text-blue-800 font-medium line-clamp-1"
+                            className="text-red-600 hover:text-red-800 font-medium line-clamp-1"
                           >
                             {answer.body.substring(0, 50)}...
                           </Link>
@@ -428,7 +428,7 @@ const UserProfile: React.FC = () => {
                           <div className="flex flex-wrap items-center gap-2 text-sm">
                             <Link 
                               to={`/questions/${answer.questionId}`}
-                              className="text-blue-600 hover:text-blue-800"
+                              className="text-red-600 hover:text-red-800"
                             >
                               View question
                             </Link>
