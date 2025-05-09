@@ -57,11 +57,12 @@ const EditProfile: React.FC = () => {
         photoURL = await uploadFile(file, path);
       }
 
+      // Update profile
       await updateUserProfile({
         displayName,
         bio,
-        photoURL: photoURL ?? undefined
-      });      
+        photoURL
+      });
 
       navigate(`/profile/${currentUser.uid}`);
     } catch (err) {
@@ -102,10 +103,10 @@ const EditProfile: React.FC = () => {
               <div className="relative">
                 {previewURL || currentUser.photoURL ? (
                   <img
-                  src={previewURL ?? currentUser.photoURL ?? undefined}
-                  alt="Profile preview"
-                  className="h-24 w-24 rounded-full object-cover"
-                />                
+                    src={previewURL || currentUser.photoURL}
+                    alt="Profile preview"
+                    className="h-24 w-24 rounded-full object-cover"
+                  />
                 ) : (
                   <div className="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center">
                     <span className="text-4xl text-gray-400">
