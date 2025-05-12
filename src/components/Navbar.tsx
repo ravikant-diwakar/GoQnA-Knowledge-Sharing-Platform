@@ -62,7 +62,7 @@
 //               </Link>
 //             </div>
 //           </div>
-          
+
 //           <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
 //             <form onSubmit={handleSearch} className="relative">
 //               <input
@@ -79,7 +79,7 @@
 //                 <Search className="w-5 h-5" />
 //               </button>
 //             </form>
-            
+
 //             {currentUser ? (
 //               <>
 //                 <Link 
@@ -89,7 +89,7 @@
 //                   <PlusCircle className="w-4 h-4 mr-1" />
 //                   Ask Question
 //                 </Link>
-                
+
 //                 <div className="relative">
 //                   <button 
 //                     onClick={() => setShowNotifications(!showNotifications)}
@@ -102,13 +102,13 @@
 //                       </span>
 //                     )}
 //                   </button>
-                  
+
 //                   <NotificationDropdown 
 //                     show={showNotifications} 
 //                     onClose={() => setShowNotifications(false)} 
 //                   />
 //                 </div>
-                
+
 //                 <div className="relative group">
 //                   <div className="flex items-center space-x-3">
 //                     <Link to="/settings/profile" className="flex items-center space-x-2">
@@ -127,7 +127,7 @@
 //                         @{userData?.username}
 //                       </span>
 //                     </Link>
-                    
+
 //                     <button 
 //                       onClick={handleLogout}
 //                       className="text-gray-500 hover:text-gray-700 group flex items-center"
@@ -156,7 +156,7 @@
 //               </div>
 //             )}
 //           </div>
-          
+
 //           <div className="flex items-center sm:hidden">
 //             <button
 //               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -199,7 +199,7 @@
 //               Users
 //             </Link>
 //           </div>
-          
+
 //           <form onSubmit={handleSearch} className="px-4 pb-2">
 //             <div className="relative">
 //               <input
@@ -217,7 +217,7 @@
 //               </button>
 //             </div>
 //           </form>
-          
+
 //           <div className="pt-4 pb-3 border-t border-gray-200">
 //             {currentUser ? (
 //               <div>
@@ -342,43 +342,47 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
+            {/* <Link to="/" className="flex-shrink-0 flex items-center">
               <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-800 bg-clip-text text-transparent">
-                Q&A
+                GoQnA
+              </span>
+            </Link> */}
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <span className="text-2xl font-bold">
+                <span className="text-blue-700">Go</span>
+                <span className="text-red-700">QnA</span>
               </span>
             </Link>
+
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link 
-                to="/" 
-                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  location.pathname === '/' ? 'border-indigo-500 text-indigo-600' : ''
-                }`}
+              <Link
+                to="/"
+                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/' ? 'border-indigo-500 text-indigo-600' : ''
+                  }`}
               >
                 <Home className="w-4 h-4 mr-1" />
                 Home
               </Link>
-              <Link 
-                to="/tags" 
-                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  location.pathname === '/tags' ? 'border-indigo-500 text-indigo-600' : ''
-                }`}
+              <Link
+                to="/tags"
+                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/tags' ? 'border-indigo-500 text-indigo-600' : ''
+                  }`}
               >
                 Tags
               </Link>
-              <Link 
-                to="/users" 
-                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  location.pathname === '/users' ? 'border-indigo-500 text-indigo-600' : ''
-                }`}
+              <Link
+                to="/users"
+                className={`border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/users' ? 'border-indigo-500 text-indigo-600' : ''
+                  }`}
               >
                 Users
               </Link>
             </div>
           </div>
-          
+
           <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
             <form onSubmit={handleSearch} className="relative">
               <input
@@ -388,26 +392,26 @@ const Navbar: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
               >
                 <Search className="w-5 h-5" />
               </button>
             </form>
-            
+
             {currentUser ? (
               <>
-                <Link 
-                  to="/ask" 
+                <Link
+                  to="/ask"
                   className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300 flex items-center shadow-sm"
                 >
                   <PlusCircle className="w-4 h-4 mr-1" />
                   Ask Question
                 </Link>
-                
+
                 <div className="relative">
-                  <button 
+                  <button
                     onClick={() => setShowNotifications(!showNotifications)}
                     className="relative text-gray-500 hover:text-indigo-600 p-1.5 rounded-full hover:bg-gray-100"
                   >
@@ -418,20 +422,20 @@ const Navbar: React.FC = () => {
                       </span>
                     )}
                   </button>
-                  
-                  <NotificationDropdown 
-                    show={showNotifications} 
-                    onClose={() => setShowNotifications(false)} 
+
+                  <NotificationDropdown
+                    show={showNotifications}
+                    onClose={() => setShowNotifications(false)}
                   />
                 </div>
-                
+
                 <div className="relative group">
                   <div className="flex items-center space-x-3">
                     <Link to={`/profile/${currentUser.uid}`} className="flex items-center space-x-2">
                       {currentUser.photoURL ? (
-                        <img 
-                          src={currentUser.photoURL} 
-                          alt={userData?.username || 'User'} 
+                        <img
+                          src={currentUser.photoURL}
+                          alt={userData?.username || 'User'}
                           className="h-8 w-8 rounded-full ring-2 ring-gray-200"
                         />
                       ) : (
@@ -443,8 +447,8 @@ const Navbar: React.FC = () => {
                         @{userData?.username}
                       </span>
                     </Link>
-                    
-                    <button 
+
+                    <button
                       onClick={handleLogout}
                       className="text-gray-500 hover:text-red-600 p-1.5 rounded-full hover:bg-gray-100"
                       title="Sign out"
@@ -456,15 +460,15 @@ const Navbar: React.FC = () => {
               </>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="text-indigo-600 hover:text-indigo-700 px-4 py-2 rounded-md text-sm font-medium flex items-center border border-indigo-600 hover:bg-indigo-50 transition-colors duration-300"
                 >
                   <LogIn className="w-4 h-4 mr-1" />
                   Log in
                 </Link>
-                <Link 
-                  to="/signup" 
+                <Link
+                  to="/signup"
                   className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors duration-300 shadow-sm"
                 >
                   Sign up
@@ -472,10 +476,10 @@ const Navbar: React.FC = () => {
               </div>
             )}
           </div>
-          
+
           <div className="flex items-center sm:hidden">
             {currentUser && (
-              <button 
+              <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative text-gray-500 hover:text-indigo-600 p-1.5 rounded-full hover:bg-gray-100 mr-2"
               >
@@ -508,39 +512,36 @@ const Navbar: React.FC = () => {
           <div className="pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className={`${
-                location.pathname === '/'
-                  ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              className={`${location.pathname === '/'
+                ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/tags"
-              className={`${
-                location.pathname === '/tags'
-                  ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              className={`${location.pathname === '/tags'
+                ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
               onClick={() => setIsMenuOpen(false)}
             >
               Tags
             </Link>
             <Link
               to="/users"
-              className={`${
-                location.pathname === '/users'
-                  ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              className={`${location.pathname === '/users'
+                ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
               onClick={() => setIsMenuOpen(false)}
             >
               Users
             </Link>
           </div>
-          
+
           <form onSubmit={handleSearch} className="px-4 pb-2">
             <div className="relative">
               <input
@@ -550,23 +551,23 @@ const Navbar: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
               >
                 <Search className="w-5 h-5" />
               </button>
             </div>
           </form>
-          
+
           <div className="pt-4 pb-3 border-t border-gray-200">
             {currentUser ? (
               <div>
                 <div className="flex items-center px-4">
                   {currentUser.photoURL ? (
-                    <img 
-                      src={currentUser.photoURL} 
-                      alt={userData?.username || 'User'} 
+                    <img
+                      src={currentUser.photoURL}
+                      alt={userData?.username || 'User'}
                       className="h-10 w-10 rounded-full ring-2 ring-gray-200"
                     />
                   ) : (
