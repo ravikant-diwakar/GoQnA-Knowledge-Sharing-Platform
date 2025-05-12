@@ -282,7 +282,7 @@ const Signup: React.FC = () => {
     <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-cover bg-center bg-[url('https://images.pexels.com/photos/13551570/pexels-photo-13551570.jpeg')]">
       {/* Main content box, only visible on desktop */}
       {/* <div className="sm:mx-auto sm:w-full lg:max-w-xl bg-white py-8 px-4 shadow sm:px-10 sm:rounded-md w-full sm:bg-white sm:border sm:border-gray-300"> */}
-      <div className="sm:mx-auto sm:max-w-xl lg:max-w-xl w-full px-4 sm:px-10 py-8 sm:bg-white sm:shadow sm:rounded-md sm:border sm:border-gray-300 bg-transparent">
+      <div className="sm:mx-auto sm:max-w-xl lg:max-w-xl w-full px-4 sm:px-10 py-8 sm:bg-white sm:shadow sm:border sm:border-gray-300 bg-transparent">
 
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
         <p className="mt-2 text-center text-sm text-gray-600">
