@@ -399,7 +399,7 @@ const Login: React.FC = () => {
     try {
       await login(email.trim(), password);
 
-      toast.success('Login successful! Redirecting...', {
+      toast.success('Login successful! Redirecting....', {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
