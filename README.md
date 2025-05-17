@@ -1,5 +1,3 @@
-
-
 <p align="center">
 <img src="https://github.com/user-attachments/assets/b47f9428-097a-421c-83ec-579d4f6bb253" alt="Architecture Diagram" width="400"/>
 </p>
