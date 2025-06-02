@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { 
-  MessageCircle, 
-  ThumbsUp, 
-  ThumbsDown, 
-  Eye, 
-  Share2, 
-  AlertTriangle, 
+import {
+  MessageCircle,
+  ThumbsUp,
+  ThumbsDown,
+  Eye,
+  Share2,
+  AlertTriangle,
   Bookmark,
-  Sparkles 
+  Sparkles
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { doc, getDoc, collection, query, where, orderBy, getDocs, updateDoc, increment } from 'firebase/firestore';
@@ -31,20 +31,20 @@ const QuestionDetail: React.FC = () => {
   const [showAIGenerator, setShowAIGenerator] = useState(false);
   const { currentUser } = useAuth();
   const { addDocument, incrementField } = useFirestore<Answer>('answers');
-  
+
   // Fetch question and its answers
   useEffect(() => {
     const fetchQuestionAndAnswers = async () => {
       if (!id) return;
-      
+
       setLoading(true);
       setError(null);
-      
+
       try {
         // Get question
         const docRef = doc(db, 'questions', id);
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
           const questionData = docSnap.data();
           setQuestion({
@@ -63,22 +63,22 @@ const QuestionDetail: React.FC = () => {
             downvotes: questionData.downvotes || 0,
             isSolved: questionData.isSolved || false
           });
-          
+
           // Increment view count
           await updateDoc(docRef, {
             views: increment(1)
           });
-          
+
           // Get answers - simplified query to avoid complex indexing
           const answersQuery = query(
             collection(db, 'answers'),
             where('questionId', '==', id),
             orderBy('upvotes', 'desc')
           );
-          
+
           const answersSnapshot = await getDocs(answersQuery);
           const answersData: Answer[] = [];
-          
+
           answersSnapshot.forEach((doc) => {
             const data = doc.data();
             answersData.push({
@@ -95,14 +95,14 @@ const QuestionDetail: React.FC = () => {
               isAccepted: data.isAccepted || false
             });
           });
-          
+
           // Sort accepted answers to the top after fetching
           const sortedAnswers = answersData.sort((a, b) => {
             if (a.isAccepted && !b.isAccepted) return -1;
             if (!a.isAccepted && b.isAccepted) return 1;
             return 0;
           });
-          
+
           setAnswers(sortedAnswers);
         } else {
           setError('Question not found');
@@ -121,10 +121,10 @@ const QuestionDetail: React.FC = () => {
   // Handle voting
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     if (!currentUser || !question) return;
-    
+
     try {
       const questionRef = doc(db, 'questions', question.id);
-      
+
       if (voteType === 'upvote') {
         await updateDoc(questionRef, {
           upvotes: increment(1)
@@ -144,11 +144,11 @@ const QuestionDetail: React.FC = () => {
   // Handle answer submission
   const handleSubmitAnswer = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!currentUser || !question || !newAnswer.trim()) return;
-    
+
     setSubmitting(true);
-    
+
     try {
       const answer: Omit<Answer, 'id'> = {
         questionId: question.id,
@@ -162,15 +162,15 @@ const QuestionDetail: React.FC = () => {
         downvotes: 0,
         isAccepted: false
       };
-      
+
       const newAnswerDoc = await addDocument(answer);
-      
+
       // Update answer count on question
       const questionRef = doc(db, 'questions', question.id);
       await updateDoc(questionRef, {
         answerCount: increment(1)
       });
-      
+
       // Update local state
       setAnswers(prev => [...prev, newAnswerDoc]);
       setQuestion(prev => prev ? { ...prev, answerCount: (prev.answerCount || 0) + 1 } : null);
@@ -185,32 +185,32 @@ const QuestionDetail: React.FC = () => {
   // Handle accept answer
   const handleAcceptAnswer = async (answerId: string) => {
     if (!currentUser || !question) return;
-    
+
     // Verify user is the question owner
     if (currentUser.uid !== question.userId) return;
-    
+
     try {
       // Update the answer
       const answerRef = doc(db, 'answers', answerId);
       await updateDoc(answerRef, {
         isAccepted: true
       });
-      
+
       // Update the question
       const questionRef = doc(db, 'questions', question.id);
       await updateDoc(questionRef, {
         isSolved: true
       });
-      
+
       // Update local state
-      setAnswers(prev => 
-        prev.map(answer => 
-          answer.id === answerId 
-            ? { ...answer, isAccepted: true } 
+      setAnswers(prev =>
+        prev.map(answer =>
+          answer.id === answerId
+            ? { ...answer, isAccepted: true }
             : answer
         )
       );
-      
+
       setQuestion(prev => prev ? { ...prev, isSolved: true } : null);
     } catch (error) {
       console.error('Error accepting answer:', error);
@@ -257,7 +257,7 @@ const QuestionDetail: React.FC = () => {
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="text-3xl font-bold text-gray-900">{question.title}</h1>
-          
+
           <div className="flex items-center space-x-2">
             <button className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50">
               <Bookmark className="h-4 w-4 mr-1" />
@@ -273,7 +273,7 @@ const QuestionDetail: React.FC = () => {
             </button>
           </div>
         </div>
-        
+
         <div className="flex flex-wrap items-center text-sm text-gray-500 mt-2 gap-x-6 gap-y-2">
           <div>
             Asked {formattedDate}
@@ -287,11 +287,11 @@ const QuestionDetail: React.FC = () => {
             {question.answerCount} answers
           </div>
         </div>
-        
+
         <div className="mt-4 flex flex-wrap gap-2">
           {question.tags.map((tag, index) => (
-            <Link 
-              key={index} 
+            <Link
+              key={index}
               to={`/tags/${tag}`}
               className="inline-block bg-red-50 text-red-600 px-2 py-1 text-xs font-medium rounded-md hover:bg-red-100 transition-colors duration-200"
             >
@@ -306,7 +306,7 @@ const QuestionDetail: React.FC = () => {
         <div className="flex">
           {/* Voting buttons */}
           <div className="flex flex-col items-center mr-4">
-            <button 
+            <button
               onClick={() => handleVote('upvote')}
               disabled={!currentUser}
               className={`p-1 rounded-full ${currentUser ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
@@ -317,7 +317,7 @@ const QuestionDetail: React.FC = () => {
             <span className="text-center my-1 font-medium">
               {(question.upvotes || 0) - (question.downvotes || 0)}
             </span>
-            <button 
+            <button
               onClick={() => handleVote('downvote')}
               disabled={!currentUser}
               className={`p-1 rounded-full ${currentUser ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
@@ -326,25 +326,25 @@ const QuestionDetail: React.FC = () => {
               <ThumbsDown className="h-6 w-6 text-gray-500" />
             </button>
           </div>
-          
+
           {/* Question body */}
           <div className="flex-1">
             <div className="prose max-w-none">
               {question.body}
             </div>
-            
+
             <div className="mt-6 flex justify-end items-center">
               <div className="flex items-center text-sm">
                 <span className="text-gray-500 mr-2">Asked by</span>
-                <Link 
+                <Link
                   to={`/profile/${question.userId}`}
                   className="flex items-center text-red-600 hover:text-red-800"
                 >
                   {question.userPhotoURL ? (
-                    <img 
-                      src={question.userPhotoURL} 
+                    <img
+                      src={question.userPhotoURL}
                       alt={question.userName}
-                      className="h-8 w-8 rounded-full mr-2" 
+                      className="h-8 w-8 rounded-full mr-2"
                     />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
@@ -372,13 +372,13 @@ const QuestionDetail: React.FC = () => {
         <h2 className="text-xl font-bold text-gray-900 mb-4">
           {answers.length} {answers.length === 1 ? 'Answer' : 'Answers'}
         </h2>
-        
+
         {answers.length > 0 ? (
           <div>
             {answers.map((answer) => (
-              <AnswerCard 
-                key={answer.id} 
-                answer={answer} 
+              <AnswerCard
+                key={answer.id}
+                answer={answer}
                 questionId={question.id}
                 questionUserId={question.userId}
                 onAcceptAnswer={handleAcceptAnswer}
@@ -395,7 +395,7 @@ const QuestionDetail: React.FC = () => {
       {/* Post answer form */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Your Answer</h2>
-        
+
         {currentUser ? (
           <form onSubmit={handleSubmitAnswer}>
             <div className="mb-4">
@@ -403,14 +403,29 @@ const QuestionDetail: React.FC = () => {
                 <label htmlFor="answer" className="text-sm font-medium text-gray-700">
                   Write your answer
                 </label>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => setShowAIGenerator(true)}
                   className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50"
                 >
                   <Sparkles className="w-4 h-4 mr-1 text-red-600" />
                   Generate AI Answer
+                </button> */}
+                <button
+                  type="button"
+                  onClick={() => setShowAIGenerator(true)}
+                  className="relative inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white rounded-lg 
+             bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 
+             hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 
+             shadow-lg shadow-purple-300/40 
+             hover:shadow-xl hover:shadow-purple-400/50 
+             transition-all duration-300 ease-in-out 
+             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
+                >
+                  <Sparkles className="w-5 h-5 mr-2 text-white animate-pulse" />
+                  Generate AI Answer
                 </button>
+
               </div>
               <MarkdownEditor
                 value={newAnswer}
@@ -422,11 +437,10 @@ const QuestionDetail: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting || !newAnswer.trim()}
-                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                  submitting || !newAnswer.trim()
+                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${submitting || !newAnswer.trim()
                     ? 'bg-red-300 cursor-not-allowed'
                     : 'bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
-                }`}
+                  }`}
               >
                 {submitting ? 'Posting...' : 'Post Your Answer'}
               </button>
