@@ -7,7 +7,8 @@ import {
   Eye, 
   Share2, 
   AlertTriangle, 
-  Bookmark 
+  Bookmark,
+  Sparkles 
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { doc, getDoc, collection, query, where, orderBy, getDocs, updateDoc, increment } from 'firebase/firestore';
@@ -16,6 +17,8 @@ import { Question, Answer } from '../types';
 import { useAuth } from '../context/AuthContext';
 import AnswerCard from '../components/AnswerCard';
 import { useFirestore } from '../hooks/useFirestore';
+import MarkdownEditor from '../components/MarkdownEditor';
+import AIAnswerGenerator from '../components/AIAnswerGenerator';
 
 const QuestionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +28,7 @@ const QuestionDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [newAnswer, setNewAnswer] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
   const { currentUser } = useAuth();
   const { addDocument, incrementField } = useFirestore<Answer>('answers');
   
@@ -395,17 +399,23 @@ const QuestionDetail: React.FC = () => {
         {currentUser ? (
           <form onSubmit={handleSubmitAnswer}>
             <div className="mb-4">
-              <label htmlFor="answer" className="sr-only">
-                Your answer
-              </label>
-              <textarea
-                id="answer"
-                rows={6}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
-                placeholder="Write your answer here..."
+              <div className="flex justify-between items-center mb-2">
+                <label htmlFor="answer" className="text-sm font-medium text-gray-700">
+                  Write your answer
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowAIGenerator(true)}
+                  className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50"
+                >
+                  <Sparkles className="w-4 h-4 mr-1 text-red-600" />
+                  Generate AI Answer
+                </button>
+              </div>
+              <MarkdownEditor
                 value={newAnswer}
-                onChange={(e) => setNewAnswer(e.target.value)}
-                required
+                onChange={setNewAnswer}
+                height={300}
               />
             </div>
             <div className="flex justify-end">
@@ -440,6 +450,14 @@ const QuestionDetail: React.FC = () => {
               </Link>
             </div>
           </div>
+        )}
+
+        {showAIGenerator && (
+          <AIAnswerGenerator
+            question={question.title + "\n\n" + question.body}
+            onAnswerGenerated={(answer) => setNewAnswer(answer)}
+            onClose={() => setShowAIGenerator(false)}
+          />
         )}
       </div>
     </div>
