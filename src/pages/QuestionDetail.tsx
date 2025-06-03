@@ -403,14 +403,6 @@ const QuestionDetail: React.FC = () => {
                 <label htmlFor="answer" className="text-sm font-medium text-gray-700">
                   Write your answer
                 </label>
-                {/* <button
-                  type="button"
-                  onClick={() => setShowAIGenerator(true)}
-                  className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50"
-                >
-                  <Sparkles className="w-4 h-4 mr-1 text-red-600" />
-                  Generate AI Answer
-                </button> */}
                 <button
                   type="button"
                   onClick={() => setShowAIGenerator(true)}
