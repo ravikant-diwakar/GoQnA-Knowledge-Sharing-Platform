@@ -22,6 +22,7 @@ GoQnA is a modern, full-featured **Q&A Knowledge Sharing Platform** built with R
 
 ## Features
 
+
 ### Core Functionality
 - [x] **JWT Authentication** with Firebase Auth
 - [x] Rich Text Editor (Markdown Support)
