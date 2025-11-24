@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: user.uid });
 
     setUserData(userData);
-    throw new Error('Please verify your email. Check your inbox for verification link.');
+    await signOut(auth);
   };
 
   const login = async (email: string, password: string) => {

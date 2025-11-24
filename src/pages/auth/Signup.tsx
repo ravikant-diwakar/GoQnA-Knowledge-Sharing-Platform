@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { AlertCircle } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -11,8 +12,8 @@ const Signup: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);  // State for password visibility toggle
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // State for confirm password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -45,7 +46,18 @@ const Signup: React.FC = () => {
 
     try {
       await signUp(email, password, username, displayName);
-      navigate('/');
+      toast.success('Account created! Please verify your email before logging in.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+      });
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err: any) {
       console.error('Signup error:', err);
       setError(err.message || 'Failed to create account. Please try again');
