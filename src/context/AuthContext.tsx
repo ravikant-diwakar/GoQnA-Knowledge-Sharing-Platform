@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  User as FirebaseUser, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
+import {
+  User as FirebaseUser,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
   updateProfile,
   updateEmail,
@@ -21,7 +21,7 @@ interface AuthContextType {
   userData: User | null;
   loading: boolean;
   signUp: (email: string, password: string, username: string, displayName: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<FirebaseUser>;
   logout: () => Promise<void>;
   updateUserProfile: (data: Partial<User>) => Promise<void>;
   updateUserEmail: (newEmail: string, password: string) => Promise<void>;
@@ -51,11 +51,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      
+
       if (user) {
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
-        
+
         if (userSnap.exists()) {
           const data = userSnap.data() as User;
           setUserData(data);
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserData(null);
         setIsAdmin(false);
       }
-      
+
       setLoading(false);
     });
 
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     await sendEmailVerification(user);
     await updateProfile(user, { displayName: username });
-    
+
     const userData: User = {
       uid: user.uid,
       email: user.email!,
@@ -94,10 +94,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       notifications: [],
       emailVerified: false
     };
-    
+
     await setDoc(doc(db, 'users', user.uid), userData);
     await setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: user.uid });
-    
+
     setUserData(userData);
     throw new Error('Please verify your email. Check your inbox for verification link.');
   };
@@ -105,15 +105,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      
+
       if (!user.emailVerified) {
         await signOut(auth);
         throw new Error('Please verify your email before logging in');
       }
-      
-      const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, { emailVerified: true });
-      
+
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        await updateDoc(userRef, { emailVerified: true });
+      } catch (updateError) {
+        console.error("Error updating user verification status:", updateError);
+        // Continue login even if update fails
+      }
+
+      return user;
+
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
         throw new Error('Invalid email or password');
@@ -150,7 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const credential = EmailAuthProvider.credential(currentUser.email!, password);
     await reauthenticateWithCredential(currentUser, credential);
     await updateEmail(currentUser, newEmail);
-    
+
     await updateDoc(doc(db, 'users', currentUser.uid), { email: newEmail });
     setUserData(prev => prev ? { ...prev, email: newEmail } : null);
   };

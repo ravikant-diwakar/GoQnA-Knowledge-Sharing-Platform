@@ -1,11 +1,16 @@
 import { Groq } from 'groq-sdk';
 
+
 const groq = new Groq({
   apiKey: import.meta.env.VITE_GROQ_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
 export const generateAnswer = async (question: string, context?: string): Promise<string> => {
+  // Debug log to check if API key is loaded
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+  console.log('Groq API Key present:', !!apiKey, 'Length:', apiKey?.length);
+
   try {
     const prompt = context 
       ? `Given the following context and question, provide a detailed, accurate answer:
@@ -32,7 +37,7 @@ export const generateAnswer = async (question: string, context?: string): Promis
           content: prompt
         }
       ],
-      model: 'mistral-saba-24b',  // Updated model ID
+      model: 'llama-3.1-8b-instant',  // Updated model ID
       temperature: 0.7,
       max_tokens: 2048,
       top_p: 1,
@@ -40,8 +45,12 @@ export const generateAnswer = async (question: string, context?: string): Promis
     });
 
     return completion.choices[0]?.message?.content || 'Unable to generate an answer.';
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating answer:', error);
-    throw new Error('Failed to generate AI answer. Please try again later.');
+    // Log more specific error details if available
+    if (error.response) {
+        console.error('Groq API Response:', await error.response.json());
+    }
+    throw new Error(`Failed to generate AI answer: ${error.message || 'Unknown error'}`);
   }
 };

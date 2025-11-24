@@ -26,6 +26,7 @@ export interface Notification {
 export interface Question {
   id: string;
   title: string;
+  titleLowercase: string;
   body: string;
   tags: string[];
   createdAt: Date;

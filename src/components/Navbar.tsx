@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Menu, X, User, LogOut, LogIn, Home, PlusCircle, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+import { toast } from 'react-toastify';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,10 +25,12 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      toast.success('Signed out successfully');
       navigate('/');
       setIsMenuOpen(false);
     } catch (error) {
       console.error('Logout error:', error);
+      toast.error('Failed to sign out');
     }
   };
 

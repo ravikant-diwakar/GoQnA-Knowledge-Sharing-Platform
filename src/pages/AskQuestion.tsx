@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HelpCircle, AlertCircle } from 'lucide-react';
+import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import { useFirestore } from '../hooks/useFirestore';
 import { Question } from '../types';
 import MarkdownEditor from '../components/MarkdownEditor';
+import { db } from '../firebase/config';
 
 const AskQuestion: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -65,16 +67,41 @@ const AskQuestion: React.FC = () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: currentUser.uid,
-        userName: currentUser.displayName || 'Anonymous',
+        username: currentUser.displayName || 'Anonymous',
         userPhotoURL: currentUser.photoURL || undefined,
         views: 0,
         answerCount: 0,
         upvotes: 0,
         downvotes: 0,
         isSolved: false,
+        comments: []
       };
 
       const newQuestion = await addDocument(questionData);
+
+      // Update tags collection
+      try {
+        await Promise.all(tags.map(async (tag) => {
+          const tagRef = doc(db, 'tags', tag);
+          const tagSnap = await getDoc(tagRef);
+
+          if (tagSnap.exists()) {
+            await updateDoc(tagRef, {
+              count: increment(1)
+            });
+          } else {
+            await setDoc(tagRef, {
+              name: tag,
+              description: '',
+              count: 1
+            });
+          }
+        }));
+      } catch (tagError) {
+        console.error('Error updating tags:', tagError);
+        // Don't block navigation if tag update fails
+      }
+
       navigate(`/questions/${newQuestion.id}`);
     } catch (err) {
       console.error('Error submitting question:', err);
@@ -126,25 +153,6 @@ const AskQuestion: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
-        {/* <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title <span className="text-red-500">*</span>
-          </label>
-          <p className="text-sm text-gray-500 mb-1">
-            Be specific and concise (max 150 characters)
-          </p>
-          <input
-            type="text"
-            id="title"
-            maxLength={150}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
-            placeholder="e.g., How to implement authentication with Firebase in React?"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div> */}
         {/* Title */}
         <div className="mb-6">
           <label htmlFor="title" className="block text-lg font-semibold text-gray-900 mb-2 border-b pb-2">
@@ -225,8 +233,8 @@ const AskQuestion: React.FC = () => {
             type="submit"
             disabled={isSubmitting || !title.trim() || !body.trim() || tags.length === 0}
             className={`inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white ${isSubmitting || !title.trim() || !body.trim() || tags.length === 0
-                ? 'bg-red-300 cursor-not-allowed'
-                : 'bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+              ? 'bg-red-300 cursor-not-allowed'
+              : 'bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
               }`}
           >
             {isSubmitting ? 'Submitting...' : 'Post Your Question'}

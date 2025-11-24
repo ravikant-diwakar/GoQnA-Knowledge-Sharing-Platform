@@ -65,9 +65,15 @@ const QuestionDetail: React.FC = () => {
           });
 
           // Increment view count
-          await updateDoc(docRef, {
-            views: increment(1)
-          });
+          // Increment view count
+          try {
+            await updateDoc(docRef, {
+              views: increment(1)
+            });
+          } catch (error) {
+            console.error("Error updating view count:", error);
+            // Continue execution even if view increment fails
+          }
 
           // Get answers - simplified query to avoid complex indexing
           const answersQuery = query(
